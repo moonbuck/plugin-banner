@@ -1,5 +1,5 @@
 # plugin-banner
-A [Micro.blog](https://micro.blog "Micro.blog") that makes it easy to drop page-specific banners into your theme.
+A [Micro.blog](https://micro.blog "Micro.blog") plugin that makes it easy to drop page-specific banners into your theme.
 
 ![Banner 1](https://raw.githubusercontent.com/moonbuck/plugin-banner/main/images/banner1.jpeg)
 
