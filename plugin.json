@@ -2,23 +2,8 @@
     "version": "1.0.0",
     "title": "Moondeer's Banner",
     "description": "A plugin for making it easier to create page banners.",
-    "includes": [ "banner_style_injection.html" ],
+    "includes": [ "/assets/css/plugin_banner.css" ],
     "fields": [
-      {
-        "field": "params.banner_background_color",
-        "label": "Background Color",
-        "placeholder": "#FFF"
-      },
-      {
-        "field": "params.banner_height",
-        "label": "Height",
-        "placeholder": "300px"
-      },
-      {
-        "field": "params.banner_width",
-        "label": "Width",
-        "placeholder": "100%"
-      },
       {
         "field": "params.banner_data",
         "label": "Banner Data",
