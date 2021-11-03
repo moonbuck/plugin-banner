@@ -14,6 +14,6 @@
 {{ if $banner_data }}
 {{- $path := (urls.Parse .Permalink).Path -}}
 {{- with (index $banner_data $path) -}}
-<div id="{{ anchorize $path }}" class="banner-image" style="background-image: url({{ . }});"></div>
+<div id="{{ cond (eq $path "/") "home" (anchorize $path) }}" class="banner-image" style="background-image: url({{ . }});"></div>
 {{- end -}}
 {{ end }}
