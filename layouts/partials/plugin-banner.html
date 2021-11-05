@@ -1,19 +1,19 @@
-{{ $banner_data := false }}
-{{ with site.Data.plugin_banner.banner_data }}
-{{ $banner_data = . }}
-{{ else }}
-{{ with site.Params.banner_data }}{{ $banner_data = . }}{{ end }}
-{{ end }}
+{{- $banner_data := false }}
+{{- with site.Data.plugin_banner.banner_data }}
+{{- $banner_data = . }}
+{{- else }}
+{{- with site.Params.banner_data }}{{ $banner_data = . }}{{ end }}
+{{- end }}
 
-{{ if (and $banner_data (not ($banner_data | reflect.IsMap))) }}
-{{ with transform.Unmarshal $banner_data }}
-{{ $banner_data = . }}
-{{ end }}
-{{ end }}
+{{- if (and $banner_data (not ($banner_data | reflect.IsMap))) }}
+{{- with transform.Unmarshal $banner_data }}
+{{- $banner_data = . }}
+{{- end }}
+{{- end }}
 
-{{ if $banner_data }}
-{{- $path := (urls.Parse .Permalink).Path -}}
-{{- with (index $banner_data $path) -}}
+{{- if $banner_data }}
+{{- $path := (urls.Parse .Permalink).Path }}
+{{- with (index $banner_data $path) }}
 <div id="{{ cond (eq $path "/") "home" (anchorize $path) }}" class="banner-image" style="background-image: url({{ . }});"></div>
-{{- end -}}
-{{ end }}
+{{- end }}
+{{- end }}
