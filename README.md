@@ -105,7 +105,7 @@ div#categories-stream-of-consciousness
 Okay, you’re sold. But how do we get these things to show up? Simple. Pick a spot or two in your theme (I chose `layouts/_default/baseof.html` and `layouts/index.html`) and drop in this bit of code:
 
 ```go
-{{ if templates.Exists "partials/plugin_banner.html" }}
-{{ partial "plugin_banner.html" . }}
+{{ if templates.Exists "partials/plugin-banner.html" }}
+{{ partial "plugin-banner.html" . }}
 {{ end }}
 ```
