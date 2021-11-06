@@ -1,5 +1,5 @@
 {{- $banner_data := false }}
-{{- with site.Data.plugin_banner.banner_data }}
+{{- with (site.Data.plugin_banner_data | default site.Data.plugin_banner.banner_data) }}
 {{- $banner_data = . }}
 {{- else }}
 {{- with site.Params.banner_data }}{{ $banner_data = . }}{{ end }}
