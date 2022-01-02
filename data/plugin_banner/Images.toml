@@ -1,3 +1,6 @@
-# Register banner images by relative page path.
+# Banner image registration
 #
+# Register banner images by relative page path.
+###############################################
+
 # '/my/page/path/' = 'my-image-url.jpg'

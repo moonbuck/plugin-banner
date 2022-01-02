@@ -1,0 +1,120 @@
+{{- /********************************************************
+  Resolves theme and plugin data files to build a map of 
+  parameter values and injects this map into the page scratch
+  ***********************************************************/ -}}
+
+{{- /************************************************
+  Initialize variables with default parameter values
+  to ensure every parameter has a map entry. 
+  ***************************************************/ -}}
+  
+{{- $Config_Version := "" -}}
+{{- $Config_DebugPrint := false -}}
+{{- $Config_Fingerprint := true -}}
+{{- $Config_SassOutput := "compact" -}}
+
+{{- $Images := dict -}}
+
+{{- $Style_ClassName := "banner-image" -}}
+{{- $Style_Color := "inherit" -}}
+{{- $Style_Height := "300px" -}}
+{{- $Style_Width := "100%" -}}
+{{- $Style_Position := "center" -}}
+{{- $Style_Repeat := "no-repeat" -}}
+{{- $Style_Size := "cover" -}}
+{{- $Style_Image := "" -}}
+{{- $Style_ID := "" -}}
+
+{{- /************************************************
+  Override the default parameter values with values
+  found in the plugin data files.
+  ***************************************************/ -}}
+
+{{- with site.Data.plugin_banner -}}
+
+{{- with .Config.Version }}{{ $Config_Version = . }}{{ end -}}
+{{- if (isset .Config "DebugPrint") -}}
+{{- $Config_DebugPrint = .Config.DebugPrint -}}
+{{- end -}}
+{{- if (isset .Config "Fingerprint") -}}
+{{- $Config_Fingerprint = .Config.Fingerprint -}}
+{{- end -}}
+{{- with .Config.SassOutput }}{{ $Config_SassOutput = . }}{{ end -}}
+
+{{- with .Images -}}
+{{- $Images = . -}}
+{{- end -}}
+
+{{- with .Style.ClassName }}{{ $Style_ClassName = . }}{{ end -}}
+{{- with .Style.Color }}{{ $Style_Color = . }}{{ end -}}
+{{- with .Style.Height }}{{ $Style_Height = . }}{{ end -}}
+{{- with .Style.Width }}{{ $Style_Width = . }}{{ end -}}
+{{- with .Style.Position }}{{ $Style_Position = . }}{{ end -}}
+{{- with .Style.Repeat }}{{ $Style_Repeat = . }}{{ end -}}
+{{- with .Style.Size }}{{ $Style_Size = . }}{{ end -}}
+
+{{- end -}} {{- /* with site.Data.plugin_banner */ -}}
+
+{{- /**********************************************
+  Override the default/plugin parameter values with
+  values found in the theme data file.
+  *************************************************/ -}}
+
+{{- with (index site.Data "plugin-banner") -}}
+
+{{- with .Config.Version }}{{ $Config_Version = . }}{{ end -}}
+{{- if (isset .Config "DebugPrint") -}}
+{{- $Config_DebugPrint = .Config.DebugPrint -}}
+{{- end -}}
+{{- if (isset .Config "Fingerprint") -}}
+{{- $Config_Fingerprint = .Config.Fingerprint -}}
+{{- end -}}
+{{- with .Config.SassOutput }}{{ $Config_SassOutput = . }}{{ end -}}
+
+{{- with .Images -}}
+{{- $Images = . -}}
+{{- end -}}
+
+{{- with .Style.ClassName }}{{ $Style_ClassName = . }}{{ end -}}
+{{- with .Style.Color }}{{ $Style_Color = . }}{{ end -}}
+{{- with .Style.Height }}{{ $Style_Height = . }}{{ end -}}
+{{- with .Style.Width }}{{ $Style_Width = . }}{{ end -}}
+{{- with .Style.Position }}{{ $Style_Position = . }}{{ end -}}
+{{- with .Style.Repeat }}{{ $Style_Repeat = . }}{{ end -}}
+{{- with .Style.Size }}{{ $Style_Size = . }}{{ end -}}
+
+{{- end -}} {{- /* with (index site.Data "plugin-banner") */ -}}
+
+{{- /* 
+  Resolve the image and ID values.
+  */ -}}
+{{- with (urls.Parse .Permalink).Path -}}
+  {{- $Style_Image = index $Images . -}}
+  {{- $Style_ID = cond (eq . "/") "home" (anchorize .) -}}
+{{- end -}}
+
+{{- /**************************************************
+  Construct the intermediate maps (mostly for clarity).
+  
+  The map inserted into the page scratch will have the 
+  following key structure:
+  
+  Config
+  Images
+  Style
+  *********************************************************/ -}}
+  
+{{- /* Style */ -}}
+{{- $Style := dict "ClassName" $Style_ClassName "Color" $Style_Color "Height" $Style_Height "Width" $Style_Width "Position" $Style_Position "Repeat" $Style_Repeat "Size" $Style_Size "Image" $Style_Image "ID" $Style_ID -}}
+
+{{- /* Config */ -}}
+{{- $Config := dict "Version" $Config_Version "DebugPrint" $Config_DebugPrint "Fingerprint" $Config_Fingerprint "SassOutput" $Config_SassOutput -}}
+
+{{- /* Parameters */ -}}
+{{- $Parameters := dict "Config" $Config "Images" $Images "Style" $Style -}}
+
+{{- /********************************************
+  Insert the parameter map into the page scratch.
+  ***********************************************/ -}}
+  
+{{- .Scratch.Set "plugin-banner.Parameters" $Parameters -}}

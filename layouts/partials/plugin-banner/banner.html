@@ -1,0 +1,5 @@
+{{- with (.Scratch.Get "plugin-banner.Parameters").Style }}
+  {{- if (and .ID .ClassName -}}
+<div id="{{ .ID }}" class="{{ .ClassName }}"></div>
+  {{- end -}}
+{{- end }}

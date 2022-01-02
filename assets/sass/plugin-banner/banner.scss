@@ -1,0 +1,14 @@
+{{ with (.Scratch.Get "plugin-banner.Parameters").Style }}
+
+#{{ .ID }}.{{ .ClassName }} {
+  background-color: {{ .Color }};
+  height: {{ .Height }};
+  width: {{ .Width }};
+  background-image: url({{ .Image }});
+  background-position: {{ .Position }};
+  background-repeat: {{ .Repeat }};
+  background-size: {{ .Size }};
+  position: relative;
+}
+
+{{ end }}
