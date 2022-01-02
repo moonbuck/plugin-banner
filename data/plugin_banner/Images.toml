@@ -1,0 +1,3 @@
+# Register banner images by relative page path.
+#
+# '/my/page/path/' = 'my-image-url.jpg'
