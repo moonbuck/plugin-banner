@@ -1,6 +1,6 @@
 {{- with .Scratch.Get "plugin-banner.Parameters" }}
-  {{- $index := index .Banners.IndexByPath (urls.Parse $.Permalink).Path | int -}}
+  {{- $index := index .Banners.IndexByPath (urls.Parse $.Permalink).Path -}}
   {{- if $index -}}
-<div id="{{ index .Banners.IDs $index }}" class="{{ .Style.ClassName }}"></div>
+<div id="{{ index .Banners.IDs (int $index) }}" class="{{ .Style.ClassName }}"></div>
   {{- end -}}
 {{- end }}
