@@ -1,14 +1,27 @@
-{{ with (.Scratch.Get "plugin-banner.Parameters").Style }}
+{{ with .Scratch.Get "plugin-banner.Parameters" }}
 
-#{{ .ID }}.{{ .ClassName }} {
+  {{ with .Style }}
+  
+.{{ .ClassName }} {
   background-color: {{ .Color }};
   height: {{ .Height }};
   width: {{ .Width }};
-  background-image: url({{ .Image }});
   background-position: {{ .Position }};
   background-repeat: {{ .Repeat }};
   background-size: {{ .Size }};
   position: relative;
+  
+  {{ end }}
+  
+  {{ $URLs := .Banners.URLs }}
+  
+  {{ range $id, $index := .Banners.IndexByID }}
+  
+      
+    &#{{ $id }} { background-image: url({{ index $URLs $index }}); }
+  
+  {{ end }}
+  
 }
 
 {{ end }}

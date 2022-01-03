@@ -22,8 +22,6 @@
 {{- $Style_Position := "center" -}}
 {{- $Style_Repeat := "no-repeat" -}}
 {{- $Style_Size := "cover" -}}
-{{- $Style_Image := "" -}}
-{{- $Style_ID := "" -}}
 
 {{- /************************************************
   Override the default parameter values with values
@@ -85,12 +83,28 @@
 
 {{- end -}} {{- /* with (index site.Data "plugin-banner") */ -}}
 
-{{- /* 
-  Resolve the image and ID values.
-  */ -}}
-{{- with (urls.Parse .Permalink).Path -}}
-  {{- $Style_Image = index $Images . -}}
-  {{- $Style_ID = cond (eq . "/") "home" (anchorize .) -}}
+{{- /* Generate an index registery of banners. */ -}}
+{{- $Paths := slice -}}
+{{- $URLs := slice -}}
+{{- $IDs := slice -}}
+
+{{- range $path, $url := $Images -}}
+
+{{- $id := cond (eq $path "/") "home" ($path | anchorize) -}}
+{{- $Paths = $Paths | append $path -}}
+{{- $URLs = $URLs | append $url -}}
+{{- $IDs = $IDs | append $id -}}
+
+{{- end -}}
+
+{{- $IndexByID := "" -}}
+{{- range $index, $id := $IDs -}}
+{{- $IndexByID = printf "%s'%s' = %v\n" $IndexByID $id $index -}}
+{{- end -}}
+
+{{- $IndexByPath := "" -}}
+{{- range $index, $path := $Paths -}}
+{{- $IndexByPath = printf "%s'%s' = '%v'\n" $IndexByPath $path $index -}}
 {{- end -}}
 
 {{- /**************************************************
@@ -100,18 +114,21 @@
   following key structure:
   
   Config
-  Images
+  Banners
   Style
   *********************************************************/ -}}
   
 {{- /* Style */ -}}
-{{- $Style := dict "ClassName" $Style_ClassName "Color" $Style_Color "Height" $Style_Height "Width" $Style_Width "Position" $Style_Position "Repeat" $Style_Repeat "Size" $Style_Size "Image" $Style_Image "ID" $Style_ID -}}
+{{- $Style := dict "ClassName" $Style_ClassName "Color" $Style_Color "Height" $Style_Height "Width" $Style_Width "Position" $Style_Position "Repeat" $Style_Repeat "Size" $Style_Size -}}
+
+{{- /* Banners */ -}}
+{{- $Banners := dict "IndexByID" ($IndexByID | transform.Unmarshal) "IndexByPath" ($IndexByPath | transform.Unmarshal) "IDs" $IDs "Paths" $Paths "URLs" $URLs -}}
 
 {{- /* Config */ -}}
 {{- $Config := dict "Version" $Config_Version "DebugPrint" $Config_DebugPrint "Fingerprint" $Config_Fingerprint "SassOutput" $Config_SassOutput -}}
 
 {{- /* Parameters */ -}}
-{{- $Parameters := dict "Config" $Config "Images" $Images "Style" $Style -}}
+{{- $Parameters := dict "Config" $Config "Banners" $Banners "Style" $Style -}}
 
 {{- /********************************************
   Insert the parameter map into the page scratch.
