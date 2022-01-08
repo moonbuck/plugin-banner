@@ -13,8 +13,6 @@
   "Fingerprint" true
   "SassOutput" "compact" -}}
   
-{{- $Images := dict -}}
-
 {{- $Style := dict
   "ClassName" "banner-image"
   "Color" "inherit"
@@ -26,7 +24,6 @@
   
 {{- $Parameters := dict 
   "Config" $Config 
-  "Images" $Images 
   "Style" $Style -}}
 
 
@@ -56,7 +53,7 @@
 {{- $URLs := slice -}}
 {{- $IDs := slice -}}
 
-{{- range $path, $url := $Images -}}
+{{- range $path, $url := $Parameters.Images -}}
 
 {{- $id := cond (eq $path "/") "home" ($path | anchorize) -}}
 {{- $Paths = $Paths | append $path -}}
@@ -65,19 +62,19 @@
 
 {{- end -}}
 
-{{- $IndexByID := "" -}}
+{{- $IndexByID := dict -}}
 {{- range $index, $id := $IDs -}}
-{{- $IndexByID = printf "%s'%s' = %v\n" $IndexByID $id $index -}}
+{{- $IndexByID = merge $IndexByID (dict $id $index) -}}
 {{- end -}}
 
-{{- $IndexByPath := "" -}}
+{{- $IndexByPath := dict -}}
 {{- range $index, $path := $Paths -}}
-{{- $IndexByPath = printf "%s'%s' = '%v'\n" $IndexByPath $path $index -}}
+{{- $IndexByPath = merge $IndexByPath (dict $path $index) -}}
 {{- end -}}
 
 {{- $Banners := dict 
-  "IndexByID" ($IndexByID | transform.Unmarshal) 
-  "IndexByPath" ($IndexByPath | transform.Unmarshal) 
+  "IndexByID" $IndexByID
+  "IndexByPath" $IndexByPath
   "IDs" $IDs 
   "Paths" $Paths 
   "URLs" $URLs -}}
