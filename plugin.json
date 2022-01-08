@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "4.0.0",
   "title": "Moondeer's Banner",
   "description": "A plugin for making it easier to create page banners.",
   "includes": [ "plugin-banner/injection.html" ]

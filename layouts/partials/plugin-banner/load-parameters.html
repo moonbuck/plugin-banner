@@ -7,21 +7,28 @@
   Initialize variables with default parameter values
   to ensure every parameter has a map entry. 
   ***************************************************/ -}}
+{{- $Config := dict 
+  "Version" ""
+  "DebugPrint" false
+  "Fingerprint" true
+  "SassOutput" "compact" -}}
   
-{{- $Config_Version := "" -}}
-{{- $Config_DebugPrint := false -}}
-{{- $Config_Fingerprint := true -}}
-{{- $Config_SassOutput := "compact" -}}
-
 {{- $Images := dict -}}
 
-{{- $Style_ClassName := "banner-image" -}}
-{{- $Style_Color := "inherit" -}}
-{{- $Style_Height := "300px" -}}
-{{- $Style_Width := "100%" -}}
-{{- $Style_Position := "center" -}}
-{{- $Style_Repeat := "no-repeat" -}}
-{{- $Style_Size := "cover" -}}
+{{- $Style := dict
+  "ClassName" "banner-image"
+  "Color" "inherit"
+  "Height" "300px"
+  "Width" "100%"
+  "Position" "center"
+  "Repeat" "no-repeat"
+  "Size" "cover" -}}
+  
+{{- $Parameters := dict 
+  "Config" $Config 
+  "Images" $Images 
+  "Style" $Style -}}
+
 
 {{- /************************************************
   Override the default parameter values with values
@@ -29,29 +36,8 @@
   ***************************************************/ -}}
 
 {{- with site.Data.plugin_banner -}}
-
-{{- with .Config.Version }}{{ $Config_Version = . }}{{ end -}}
-{{- if (isset .Config "DebugPrint") -}}
-{{- $Config_DebugPrint = .Config.DebugPrint -}}
+  {{- $Parameters = merge $Parameters . -}}
 {{- end -}}
-{{- if (isset .Config "Fingerprint") -}}
-{{- $Config_Fingerprint = .Config.Fingerprint -}}
-{{- end -}}
-{{- with .Config.SassOutput }}{{ $Config_SassOutput = . }}{{ end -}}
-
-{{- with .Images -}}
-{{- $Images = . -}}
-{{- end -}}
-
-{{- with .Style.ClassName }}{{ $Style_ClassName = . }}{{ end -}}
-{{- with .Style.Color }}{{ $Style_Color = . }}{{ end -}}
-{{- with .Style.Height }}{{ $Style_Height = . }}{{ end -}}
-{{- with .Style.Width }}{{ $Style_Width = . }}{{ end -}}
-{{- with .Style.Position }}{{ $Style_Position = . }}{{ end -}}
-{{- with .Style.Repeat }}{{ $Style_Repeat = . }}{{ end -}}
-{{- with .Style.Size }}{{ $Style_Size = . }}{{ end -}}
-
-{{- end -}} {{- /* with site.Data.plugin_banner */ -}}
 
 {{- /**********************************************
   Override the default/plugin parameter values with
@@ -59,31 +45,13 @@
   *************************************************/ -}}
 
 {{- with (index site.Data "plugin-banner") -}}
-
-{{- with .Config.Version }}{{ $Config_Version = . }}{{ end -}}
-{{- if (isset .Config "DebugPrint") -}}
-{{- $Config_DebugPrint = .Config.DebugPrint -}}
-{{- end -}}
-{{- if (isset .Config "Fingerprint") -}}
-{{- $Config_Fingerprint = .Config.Fingerprint -}}
-{{- end -}}
-{{- with .Config.SassOutput }}{{ $Config_SassOutput = . }}{{ end -}}
-
-{{- with .Images -}}
-{{- $Images = . -}}
+  {{- $Parameters = merge $Parameters . -}}
 {{- end -}}
 
-{{- with .Style.ClassName }}{{ $Style_ClassName = . }}{{ end -}}
-{{- with .Style.Color }}{{ $Style_Color = . }}{{ end -}}
-{{- with .Style.Height }}{{ $Style_Height = . }}{{ end -}}
-{{- with .Style.Width }}{{ $Style_Width = . }}{{ end -}}
-{{- with .Style.Position }}{{ $Style_Position = . }}{{ end -}}
-{{- with .Style.Repeat }}{{ $Style_Repeat = . }}{{ end -}}
-{{- with .Style.Size }}{{ $Style_Size = . }}{{ end -}}
-
-{{- end -}} {{- /* with (index site.Data "plugin-banner") */ -}}
-
-{{- /* Generate an index registery of banners. */ -}}
+{{- /************************************ 
+  Generate an index registery of banners. 
+  ***************************************/ -}}
+  
 {{- $Paths := slice -}}
 {{- $URLs := slice -}}
 {{- $IDs := slice -}}
@@ -107,29 +75,15 @@
 {{- $IndexByPath = printf "%s'%s' = '%v'\n" $IndexByPath $path $index -}}
 {{- end -}}
 
-{{- /**************************************************
-  Construct the intermediate maps (mostly for clarity).
+{{- $Banners := dict 
+  "IndexByID" ($IndexByID | transform.Unmarshal) 
+  "IndexByPath" ($IndexByPath | transform.Unmarshal) 
+  "IDs" $IDs 
+  "Paths" $Paths 
+  "URLs" $URLs -}}
   
-  The map inserted into the page scratch will have the 
-  following key structure:
+{{- $Parameters = merge $Parameters (dict "Banners" $Banners) -}}
   
-  Config
-  Banners
-  Style
-  *********************************************************/ -}}
-  
-{{- /* Style */ -}}
-{{- $Style := dict "ClassName" $Style_ClassName "Color" $Style_Color "Height" $Style_Height "Width" $Style_Width "Position" $Style_Position "Repeat" $Style_Repeat "Size" $Style_Size -}}
-
-{{- /* Banners */ -}}
-{{- $Banners := dict "IndexByID" ($IndexByID | transform.Unmarshal) "IndexByPath" ($IndexByPath | transform.Unmarshal) "IDs" $IDs "Paths" $Paths "URLs" $URLs -}}
-
-{{- /* Config */ -}}
-{{- $Config := dict "Version" $Config_Version "DebugPrint" $Config_DebugPrint "Fingerprint" $Config_Fingerprint "SassOutput" $Config_SassOutput -}}
-
-{{- /* Parameters */ -}}
-{{- $Parameters := dict "Config" $Config "Banners" $Banners "Style" $Style -}}
-
 {{- /********************************************
   Insert the parameter map into the page scratch.
   ***********************************************/ -}}
