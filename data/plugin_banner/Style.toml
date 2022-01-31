@@ -7,7 +7,7 @@ ClassName = 'banner-image'
 
 # The background-color CSS property value for the image.
 #
-Color = '#516189'
+Color = 'inherit'
 
 # The height CSS property value for the image.
 #
