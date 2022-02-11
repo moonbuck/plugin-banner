@@ -1,25 +1,18 @@
 {{ with .Scratch.Get "plugin-banner.Parameters" }}
 
-  {{ with .Style }}
-  
-.{{ .ClassName }} {
-  background-color: {{ .Color }};
-  height: {{ .Height }};
-  width: {{ .Width }};
-  background-position: {{ .Position }};
-  background-repeat: {{ .Repeat }};
-  background-size: {{ .Size }};
+.{{ .Style.ClassName }} {
+  background-color: {{ .Style.Color }};
+  height: {{ .Style.Height }};
+  width: {{ .Style.Width }};
+  background-position: {{ .Style.Position }};
+  background-repeat: {{ .Style.Repeat }};
+  background-size: {{ .Style.Size }};
   position: relative;
-  
-  {{ end }}
-  
+    
   {{ $URLs := .Banners.URLs }}
   
-  {{ range $id, $index := .Banners.IndexByID }}
-  
-      
-    &#{{ $id }} { background-image: url({{ index $URLs $index }}); }
-  
+  {{ range $id, $index := .Banners.IndexByID }}  
+    &#{{ $id }} { background-image: url({{ index $URLs $index }}); }  
   {{ end }}
   
 }

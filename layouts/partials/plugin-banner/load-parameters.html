@@ -7,24 +7,21 @@
   Initialize variables with default parameter values
   to ensure every parameter has a map entry. 
   ***************************************************/ -}}
-{{- $Config := dict 
-  "Version" ""
-  "DebugPrint" false
-  "Fingerprint" true
-  "SassOutput" "compact" -}}
-  
-{{- $Style := dict
-  "ClassName" "banner-image"
-  "Color" "inherit"
-  "Height" "300px"
-  "Width" "100%"
-  "Position" "center"
-  "Repeat" "no-repeat"
-  "Size" "cover" -}}
-  
 {{- $Parameters := dict 
-  "Config" $Config 
-  "Style" $Style -}}
+  "Config" (dict 
+    "Version" ""
+    "DebugPrint" false
+    "Fingerprint" true
+    "SassOutput" "compact") 
+  "Style" (dict
+    "ClassName" "banner-image"
+    "Color" "inherit"
+    "Height" "300px"
+    "Width" "100%"
+    "Position" "center"
+    "Repeat" "no-repeat"
+    "Size" "cover") 
+  -}}
 
 
 {{- /************************************************
@@ -55,10 +52,18 @@
 
 {{- range $path, $url := $Parameters.Images -}}
 
-{{- $id := cond (eq $path "/") "home" ($path | anchorize) -}}
-{{- $Paths = $Paths | append $path -}}
-{{- $URLs = $URLs | append $url -}}
-{{- $IDs = $IDs | append $id -}}
+  {{- $components := slice "banner" -}}
+  {{- if (eq $path "/") -}}
+    {{- $components = $components | append "home" -}}
+  {{- else -}}
+    {{- $components = $components | append (split (trim $path "/") "/") -}}
+  {{- end -}}
+ 
+  {{- $id := delimit $components "-" | anchorize -}}
+
+  {{- $Paths = $Paths | append $path -}}
+  {{- $URLs = $URLs | append $url -}}
+  {{- $IDs = $IDs | append $id -}}
 
 {{- end -}}
 

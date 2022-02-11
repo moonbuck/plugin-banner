@@ -1,6 +1,6 @@
 {
   "version": "4.0.1",
   "title": "Moondeer's Banner",
-  "description": "A plugin for making it easier to create page banners. An updated README is on the way. See the documented configuration files in the plugin's data directory for plugin parameters and feel free to holler at me with any questions.",
+  "description": "A plugin for making it easier to create page banners. Details on configuring plugin parameters may be found <a href='https://moondeer.blog/2022/02/11/pluginbanner-a-readme.html'>here</a>",
   "includes": [ "plugin-banner/injection.html" ]
 }
